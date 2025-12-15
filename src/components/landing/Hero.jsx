@@ -34,13 +34,6 @@ export default function Hero() {
           <a href="/mood">Start Listening 🎶</a>
         </Button>
 
-        <Button
-          size="lg"
-          variant="outline"
-          className="rounded-xl border-white/20 text-white backdrop-blur-md hover:bg-white/10"
-        >
-          Live Demo
-        </Button>
       </div>
     </section>
   );
