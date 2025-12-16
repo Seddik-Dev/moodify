@@ -5,13 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function TrackCard({ track }) {
   if (!track) return null;
-
-  const image = track.album?.images?.[0]?.url || track.album?.images?.[1]?.url;
-
   const artists = track.artists?.map((a) => a.name).join(", ");
-
-  console.log("Rendering TrackCard for:", track);
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -19,23 +13,24 @@ export default function TrackCard({ track }) {
       whileHover={{ scale: 1.03 }}
       transition={{ duration: 0.3 }}
     >
-      <Card className="bg-zinc-900 border-zinc-800 rounded-xl overflow-hidden">
+      <Card className="min-w-[50px] bg-white/5 hover:bg-white/10 p-4 rounded-xl transition group w-50 border-0">
         <CardContent className="p-0">
-          {/* IMAGE */}
-          <img
-            src={image}
-            alt={track.name}
-            className="w-full h-48 object-cover"
-          />
+          <div className="relative">
+            <img
+              src={track.image}
+              alt={track.name}
+              className="rounded-lg mb-3"
+            />
 
-          {/* INFO */}
-          <div className="p-3">
-            <h3 className="text-sm font-semibold text-white truncate">
-              {track.name}
-            </h3>
-
-            <p className="text-xs text-zinc-400 truncate">{artists}</p>
+            {/* PLAY OVERLAY */}
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+              <span className="text-white text-xl">▶</span>
+            </div>
           </div>
+
+          <div className="font-semibold truncate text-white">{track.name}</div>
+
+          <div className="text-sm text-zinc-400 truncate">{artists}</div>
         </CardContent>
       </Card>
     </motion.div>

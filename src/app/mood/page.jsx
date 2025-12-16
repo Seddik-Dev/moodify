@@ -39,7 +39,6 @@ export default function MoodPage() {
       console.error("Network error:", err);
     }
   }
-  console.log(aiTracks);
 
   return (
     <div className="flex min-h-screen bg-black text-white">
@@ -58,7 +57,7 @@ export default function MoodPage() {
               ✨ AI Picks for your mood
             </h2>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-7 gap-6">
               {aiTracks.map((track) => (
                 <TrackCard key={track.id} track={track} />
               ))}

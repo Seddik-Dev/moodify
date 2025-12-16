@@ -41,7 +41,7 @@ export async function searchTracks(query) {
   const accessToken = await getSpotifyAccessToken();
 
   const res = await fetch(
-    `${SPOTIFY_API}/search?q=${encodeURIComponent(query)}&type=track&limit=10`,
+    `${SPOTIFY_API}/search?q=${encodeURIComponent(query)}&type=track&limit=30`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
