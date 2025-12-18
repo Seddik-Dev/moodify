@@ -4,43 +4,32 @@ import { searchTracks } from "@/lib/spotify";
 
 export async function POST(req) {
   try {
-    const { mood } = await req.json();
+    const { mood, offset = 0, limit = 50 } = await req.json();
 
     if (!mood) {
-      return NextResponse.json(
-        { error: "Mood is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Mood is required" }, { status: 400 });
     }
 
     // AI analysis
     const aiResult = await analyzeMood(mood);
 
-    // ✅ Validate AI response
-    if (
-      !aiResult ||
-      !Array.isArray(aiResult.queries) ||
-      aiResult.queries.length === 0
-    ) {
+    if (!aiResult || !Array.isArray(aiResult.queries) || aiResult.queries.length === 0) {
       throw new Error("AI failed to generate search queries");
     }
 
-    // Turn queries into one Spotify search string
     const query = aiResult.queries.join(" ");
 
-    // Spotify search
-    const tracks = await searchTracks(query);
+    // Spotify search avec pagination
+    const { tracks, pagination } = await searchTracks(query, { limit, offset });
 
     return NextResponse.json({
-      explanation: aiResult.explanation, // optional, for UI
+      explanation: aiResult.explanation,
       tracks,
+      pagination,
     });
 
   } catch (err) {
     console.error("API ERROR:", err);
-    return NextResponse.json(
-      { error: err.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
