@@ -31,7 +31,6 @@ export default function TrackCard({ track, onPlay, isPlaying }) {
         }
       `}
     >
-      {/* IMAGE */}
       <div className="relative ">
         <img
           src={image}
