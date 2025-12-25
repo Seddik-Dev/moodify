@@ -6,7 +6,7 @@ import TrackRow from "./TrackRow";
 import TrackCard from "./TrackCard";
 import BottomSpotifyPlayer from "./BottomPlayer";
 import NowPlayingSidebar from "./NowPlayingSidebar";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 
 export default function MoodPage() {
   const [mood, setMood] = useState("");
@@ -26,7 +26,7 @@ export default function MoodPage() {
   const [loadingFeatured, setLoadingFeatured] = useState(true);
   const [loadingAI, setLoadingAI] = useState(false);
 
-  const hasAITracks = aiTracks.length > 0;
+  const hasAITracks = uniqueAiTracks.length > 0;
 
   // Load featured tracks
   useEffect(() => {
@@ -56,11 +56,8 @@ export default function MoodPage() {
         return;
       }
 
-      if (loadMore) {
-        setAiTracks((prev) => [...prev, ...data.tracks]);
-      } else {
-        setAiTracks(data.tracks);
-      }
+      // Append new tracks instead of replacing (for both new searches and load more)
+      setAiTracks(data.tracks);
 
       setAiPagination(data.pagination);
     } catch (err) {
@@ -109,7 +106,7 @@ export default function MoodPage() {
                 ✨ AI Picks for your mood
               </h2>
               <div className="grid grid-cols-2 lg:grid-cols-7 md:grid-cols-3 sm:grid-cols-1 gap-x-8 gap-y-4 overflow-x-auto pb-2">
-                {aiTracks.map((track, idx) => (
+                {uniqueAiTracks.map((track, idx) => (
                   <TrackCard
                     key={track.id + "_" + idx}
                     track={track}
@@ -129,7 +126,7 @@ export default function MoodPage() {
                     onClick={() => generate(true)}
                     className="px-4 py-2 bg-green-500 hover:bg-green-600 rounded text-black font-semibold"
                   >
-                    Charger plus
+                    Regenerate 
                   </button>
                 </div>
               )}
