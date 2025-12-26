@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { Buffer } from "buffer";
+import { Buffer } from "node:buffer";
 
 /* ========= UTILS ========= */
 // Cryptographically secure random functions
@@ -94,7 +94,6 @@ export async function GET() {
 
     let recoTracks = [];
 
-    try {
       const recoRes = await fetch(
         `https://api.spotify.com/v1/recommendations?limit=25&seed_genres=${seedGenres}&market=US`,
         {
@@ -106,9 +105,7 @@ export async function GET() {
         const recoData = await recoRes.json();
         recoTracks = recoData.tracks || [];
       }
-    } catch (e) {
-      console.warn("Recommendations skipped");
-    }
+
 
     /* ---------- MERGE + SHUFFLE ---------- */
     const tracks = shuffle([...searchTracks, ...recoTracks]).slice(0, 20);

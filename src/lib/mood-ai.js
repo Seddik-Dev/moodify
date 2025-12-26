@@ -37,23 +37,16 @@ export async function analyzeMood(mood) {
 
     if (!text) return { explanation: "", player_mode: "", queries: [] };
 
-    try {
-      return JSON.parse(text);
-    } catch (e) {
-      console.error("DeepSeek JSON parse error:", text);
-      return { explanation: "", player_mode: "", queries: ["chill"] };
-    }
+    return JSON.parse(text);
   } catch (err) {
     console.error("Network/API error:", err);
     return { explanation: "", player_mode: "", queries: ["chill"] };
   }
 }
 
-// Exemple d'utilisation
-(async () => {
-  const mood = "I feel nostalgic and calm, want relaxing evening music";
-  const result = await analyzeMood(mood);
-  console.log("🎵 Explanation:", result.explanation);
-  console.log("🎧 Player mode:", result.player_mode);
-  console.log("🔍 Queries:", result.queries);
-})();
+// Example usage
+const mood = "I feel nostalgic and calm, want relaxing evening music";
+const result = await analyzeMood(mood);
+console.log("🎵 Explanation:", result.explanation);
+console.log("🎧 Player mode:", result.player_mode);
+console.log("🔍 Queries:", result.queries);
