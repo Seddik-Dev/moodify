@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
     "sonar": "sonar-scanner"
   },
   "dependencies": {

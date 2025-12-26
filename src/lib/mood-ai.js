@@ -4,6 +4,11 @@ const client = new InferenceClient(process.env.HF_API_KEY);
 
 export async function analyzeMood(mood) {
   try {
+    // Validate input
+    if (!mood || typeof mood !== "string" || mood.trim().length === 0) {
+      return { explanation: "", player_mode: "", queries: ["chill"] };
+    }
+
     const chatCompletion = await client.chatCompletion({
       model: "deepseek-ai/DeepSeek-V3.2:novita",
       messages: [
@@ -32,21 +37,36 @@ export async function analyzeMood(mood) {
       ],
     });
 
-    // Hugging Face renvoie le texte généré dans chatCompletion.choices[0].message.content
+    // Hugging Face returns generated text in chatCompletion.choices[0].message.content
     const text = chatCompletion.choices?.[0]?.message?.content?.trim();
 
-    if (!text) return { explanation: "", player_mode: "", queries: [] };
+    if (!text) {
+      return { explanation: "", player_mode: "", queries: ["chill"] };
+    }
 
-    return JSON.parse(text);
+    // Try to parse JSON, fallback if invalid
+    try {
+      return JSON.parse(text);
+    } catch (parseError) {
+      console.error("Failed to parse API response:", parseError);
+      return { explanation: "", player_mode: "", queries: ["chill"] };
+    }
   } catch (err) {
     console.error("Network/API error:", err);
     return { explanation: "", player_mode: "", queries: ["chill"] };
   }
 }
 
-// Example usage
-const mood = "I feel nostalgic and calm, want relaxing evening music";
-const result = await analyzeMood(mood);
-console.log("🎵 Explanation:", result.explanation);
-console.log("🎧 Player mode:", result.player_mode);
-console.log("🔍 Queries:", result.queries);
+// Example usage (only for testing/development, not in production)
+// Should be moved to a separate test file
+if (process.env.NODE_ENV === "development") {
+  try {
+    const mood = "I feel nostalgic and calm, want relaxing evening music";
+    const result = await analyzeMood(mood);
+    console.log("🎵 Explanation:", result.explanation);
+    console.log("🎧 Player mode:", result.player_mode);
+    console.log("🔍 Queries:", result.queries);
+  } catch (error) {
+    console.error("Example usage error:", error);
+  }
+}
