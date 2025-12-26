@@ -2,12 +2,31 @@ import { NextResponse } from "next/server";
 import { Buffer } from "buffer";
 
 /* ========= UTILS ========= */
-const randomLetter = () =>
-  "abcdefghijklmnopqrstuvwxyz"[Math.floor(Math.random() * 26)];
+// Cryptographically secure random functions
+const getCryptoRandom = () => {
+  // Get random bytes from crypto API
+  const array = new Uint32Array(1);
+  crypto.getRandomValues(array);
+  return array[0] / (0xffffffff + 1); // Convert to float between 0-1
+};
 
-const randomOffset = (max = 500) => Math.floor(Math.random() * max);
+const randomLetter = () => {
+  const alphabet = "abcdefghijklmnopqrstuvwxyz";
+  const randomIndex = Math.floor(getCryptoRandom() * alphabet.length);
+  return alphabet[randomIndex];
+};
 
-const shuffle = (array) => array.sort(() => Math.random() - 0.5);
+const randomOffset = (max = 500) => Math.floor(getCryptoRandom() * max);
+
+// Fisher-Yates shuffle with crypto randomness
+const shuffle = (array) => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(getCryptoRandom() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
 
 /* ========= SPOTIFY TOKEN ========= */
 async function getSpotifyAccessToken() {

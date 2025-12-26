@@ -1,0 +1,6 @@
+projectKey=nextjs-mood-app
+serverUrl=http://localhost:9000
+serverVersion=25.12.0.117093
+dashboardUrl=http://localhost:9000/dashboard?id=nextjs-mood-app
+ceTaskId=b357dd51-9f1a-40c1-be56-163bc9b1e8a7
+ceTaskUrl=http://localhost:9000/api/ce/task?id=b357dd51-9f1a-40c1-be56-163bc9b1e8a7
