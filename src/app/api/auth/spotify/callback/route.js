@@ -38,7 +38,6 @@ export async function GET(req) {
     new URL("/mood", req.url)
   );
 
-  // 🔐 Store token securely (cookie)
   response.cookies.set("spotify_access_token", data.access_token, {
     httpOnly: true,
     secure: false, // set true in production
